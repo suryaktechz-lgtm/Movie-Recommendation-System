@@ -101,6 +101,24 @@ The model identifies movies with the closest vector distance and returns the mos
 
 ---
 
+## 📓 Model Development
+
+The recommendation model was developed in Jupyter Notebook.
+
+The notebook includes:
+
+- Data preprocessing
+- Feature extraction using CountVectorizer
+- Content-based filtering approach
+- Training the Nearest Neighbors model
+- Exporting trained model files
+
+Notebook:
+
+[📘 Movie Recommender Notebook](notebook_of_movie_recommender.ipynb)
+
+---
+
 ## 📂 Project Structure
 
 ```
