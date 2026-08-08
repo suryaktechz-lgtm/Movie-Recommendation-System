@@ -8,23 +8,27 @@ def fetch_poster(movie_id):
     data = response.json()
     return "https://image.tmdb.org/t/p/w500/" + data['poster_path']
 
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
+vectors = pickle.load(open('vectors.pkl', 'rb'))
 movies_dict = pickle.load(open('movies_list_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
-    distances = similarity[movie_index]
-    movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+
+    distances, indices = model.kneighbors(
+        vectors[movie_index],
+        n_neighbors=6
+    )
+
     recommended_movies = []
     recommended_movies_posters = []
 
-    for i in movie_list:
-        movie_id = movies.iloc[i[0]].movie_id
-        recommended_movies.append(movies.iloc[i[0]].title)
-
-        #fetch poster path
+    for i in indices[0][1:]:
+        movie_id = movies.iloc[i].movie_id
+        recommended_movies.append(movies.iloc[i].title)
         recommended_movies_posters.append(fetch_poster(movie_id))
+
     return recommended_movies, recommended_movies_posters
 
 st.title('Movie Recommendation System')
